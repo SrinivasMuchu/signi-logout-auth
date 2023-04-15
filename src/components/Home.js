@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react'
+
 import { StateContext } from '../Context/AuthProvider'
 
 const Home = () => {
@@ -23,17 +23,18 @@ const Home = () => {
     const [redAlert, setRedAlert] = useState(false);
     const [greenAlert, setGreenAlert] = useState(false);
 
-    const navigate = useNavigate();
 
     const checkName =(e)=>{
         setName(e.target.value);
-        if(name.length<=2){
+        if(name.length<=5){
             setValidName(false);
-        }else if(!name.includes(" ")){
+        }
+        else if(!name.includes(" ")){
             setValidName(false);
         }else if(!name.split(" ")[1]){
             setValidName(false);
-        }else{
+        }
+        else{
             setValidName(true);
         }
     }
@@ -71,7 +72,7 @@ const Home = () => {
 
 
     const onSubmit=()=>{
-        if(!validName || !validEmail || (password !== confirmPassword) || !validPassword){
+        if(!validName || !validEmail || (password !== confirmPassword) || !validPassword ||!validConfirmPassword){
             console.log("Invalid")
             setRedAlert(true);
             setGreenAlert(false);
@@ -87,26 +88,12 @@ const Home = () => {
         }else{
             setRedAlert(false);
             setGreenAlert(true);
-            window.localStorage.setItem("localName", name);
-            window.localStorage.setItem("localEmail", email);
-            window.localStorage.setItem("localPassword", password);
-            setName("");
-            setEmail("");
-            setPassword("");
-            setConfirmPassword("");
-            setTimeout(() => {
-                navigate('/profile');
-            },500 );
+            
+            
         }
     }
 
-    useEffect(() => {
-        if(window.localStorage.getItem("localName")){
-            setTimeout(()=>{
-                navigate('/profile');
-            }, 500)
-        }
-    }, [])
+
     
 
   return (
@@ -132,7 +119,8 @@ const Home = () => {
 
                 <div className=' border border-transparent border-b-white mt-1'>
                     <input 
-                        placeholder='Password' 
+                        placeholder='Enter your Password' 
+                        type='password'
                         className='bg-transparent h-10 w-full outline-none' 
                         value={password} 
                         onChange={checkPassword} />
@@ -140,7 +128,8 @@ const Home = () => {
 
                 <div className=' border border-transparent border-b-white mt-1'>
                     <input 
-                        placeholder='Confirm Password' 
+                    type='password'
+                        placeholder='Confirm your Password' 
                         className='bg-transparent h-10 w-full outline-none'  
                         value={confirmPassword} 
                         onChange={checkConfirmPassword} />
